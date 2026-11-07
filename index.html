@@ -7,6 +7,42 @@
 <title>BULKA INTELLIGENCE — Твой AI-пространство</title>
 <meta name="description" content="BULKA INTELLIGENCE — искусственный интеллект, полезные инструменты и цифровые продукты в одном месте.">
 
+<!-- Настройки MathJax -->
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [
+            ['\\(', '\\)'],
+            ['$', '$']
+        ],
+        displayMath: [
+            ['\\[', '\\]'],
+            ['$$', '$$']
+        ],
+        processEscapes: true
+    },
+    options: {
+        skipHtmlTags: [
+            'script',
+            'noscript',
+            'style',
+            'textarea',
+            'pre',
+            'code'
+        ]
+    },
+    startup: {
+        typeset: false
+    }
+};
+</script>
+
+<!-- Подключение MathJax -->
+<script
+    defer
+    src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js">
+</script>
+
 <style>
 * {
     margin: 0;
@@ -168,9 +204,10 @@ main {
     border-radius: 12px;
     padding: 13px;
     margin-bottom: 10px;
-    line-height: 1.6;
+    line-height: 1.7;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
+    overflow-x: auto;
 }
 
 .message.user {
@@ -181,6 +218,17 @@ main {
 .message.error {
     border-color: #ff686855;
     color: #ffaaaa;
+}
+
+.message mjx-container {
+    color: #e0caff !important;
+    max-width: 100%;
+}
+
+.message mjx-container[display="true"] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 0;
 }
 
 .chat-input {
@@ -470,10 +518,29 @@ const sendButton = document.getElementById("sendButton");
 function addMessage(text, type = "") {
     const element = document.createElement("div");
     element.className = "message " + type;
+
+    // Используем textContent, чтобы текст ИИ не мог вставлять HTML-код.
     element.textContent = text;
+
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
+
     return element;
+}
+
+async function renderMath(element) {
+    try {
+        if (!window.MathJax) {
+            return;
+        }
+
+        await window.MathJax.startup.promise;
+        await window.MathJax.typesetPromise([element]);
+
+        messages.scrollTop = messages.scrollHeight;
+    } catch (error) {
+        console.error("Ошибка отображения формул:", error);
+    }
 }
 
 async function sendMessage() {
@@ -482,7 +549,10 @@ async function sendMessage() {
     if (!value || isSending) return;
 
     if (value.length > 4000) {
-        addMessage("Сообщение слишком длинное. Попробуй сократить его.", "error");
+        addMessage(
+            "Сообщение слишком длинное. Попробуй сократить его.",
+            "error"
+        );
         return;
     }
 
@@ -509,7 +579,7 @@ async function sendMessage() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                messages: conversation.slice(-20)
+                messages: conversation.slice(-6)
             })
         });
 
@@ -525,7 +595,10 @@ async function sendMessage() {
 
         loading.remove();
 
-        addMessage(data.reply);
+        const answer = addMessage(data.reply);
+
+        // Отображаем математические формулы через MathJax.
+        await renderMath(answer);
 
         conversation.push({
             role: "assistant",
@@ -534,11 +607,14 @@ async function sendMessage() {
 
     } catch (error) {
         loading.remove();
+
         addMessage(
             "Не удалось получить ответ: " + error.message,
             "error"
         );
+
         conversation.pop();
+
         console.error(error);
     }
 
