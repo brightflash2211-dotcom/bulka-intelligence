@@ -7,18 +7,11 @@
 <title>BULKA INTELLIGENCE — Твой AI-пространство</title>
 <meta name="description" content="BULKA INTELLIGENCE — искусственный интеллект, полезные инструменты и цифровые продукты в одном месте.">
 
-<!-- Настройки MathJax -->
 <script>
 window.MathJax = {
     tex: {
-        inlineMath: [
-            ['\\(', '\\)'],
-            ['$', '$']
-        ],
-        displayMath: [
-            ['\\[', '\\]'],
-            ['$$', '$$']
-        ],
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
         processEscapes: true
     },
     options: {
@@ -35,12 +28,6 @@ window.MathJax = {
         typeset: false
     }
 };
-</script>
-
-<!-- Подключение MathJax -->
-<script
-    defer
-    src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js">
 </script>
 
 <style>
@@ -506,6 +493,19 @@ footer {
 </footer>
 
 <script>
+// Загружаем MathJax и отдельно отслеживаем его готовность.
+const mathJaxReady = new Promise((resolve) => {
+    const script = document.createElement("script");
+
+    script.src =
+        "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js";
+
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+
+    document.head.appendChild(script);
+});
+
 const API_URL = "https://tiny-cloud-6da5.brightflash2211.workers.dev/";
 
 const conversation = [];
@@ -515,11 +515,35 @@ const input = document.getElementById("question");
 const messages = document.getElementById("messages");
 const sendButton = document.getElementById("sendButton");
 
+// Преобразуем долларовые обозначения Gemini в стандартные
+// математические разделители MathJax.
+function normalizeMathDelimiters(text) {
+    let result = text;
+
+    // Сначала обрабатываем формулы на отдельных строках.
+    result = result.replace(
+        /\$\$([\s\S]+?)\$\$/g,
+        function(match, formula) {
+            return "\\[" + formula + "\\]";
+        }
+    );
+
+    // Затем обрабатываем формулы внутри текста.
+    result = result.replace(
+        /(^|[^\\])\$([^\n$]+?)\$/g,
+        function(match, before, formula) {
+            return before + "\\(" + formula + "\\)";
+        }
+    );
+
+    return result;
+}
+
 function addMessage(text, type = "") {
     const element = document.createElement("div");
     element.className = "message " + type;
 
-    // Используем textContent, чтобы текст ИИ не мог вставлять HTML-код.
+    // Не вставляем HTML от ИИ напрямую.
     element.textContent = text;
 
     messages.appendChild(element);
@@ -528,18 +552,27 @@ function addMessage(text, type = "") {
     return element;
 }
 
+// Отображаем формулы после загрузки MathJax.
 async function renderMath(element) {
     try {
-        if (!window.MathJax) {
-            return;
+        const loaded = await mathJaxReady;
+
+        if (!loaded || !window.MathJax) {
+            console.error("MathJax не загрузился. Проверь подключение к интернету.");
+            return false;
         }
 
         await window.MathJax.startup.promise;
+
         await window.MathJax.typesetPromise([element]);
 
         messages.scrollTop = messages.scrollHeight;
+
+        return true;
+
     } catch (error) {
-        console.error("Ошибка отображения формул:", error);
+        console.error("Ошибка MathJax:", error);
+        return false;
     }
 }
 
@@ -595,11 +628,15 @@ async function sendMessage() {
 
         loading.remove();
 
-        const answer = addMessage(data.reply);
+        // Преобразуем $...$ и $$...$$ перед отображением.
+        const formattedReply = normalizeMathDelimiters(data.reply);
 
-        // Отображаем математические формулы через MathJax.
+        const answer = addMessage(formattedReply);
+
+        // Рисуем формулы.
         await renderMath(answer);
 
+        // В историю сохраняем исходный ответ Gemini.
         conversation.push({
             role: "assistant",
             content: data.reply
