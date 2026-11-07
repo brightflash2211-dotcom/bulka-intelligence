@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BULKA INTELLIGENCE — Твой AI-пространство</title>
+<meta name="description" content="BULKA INTELLIGENCE — искусственный интеллект, полезные инструменты и цифровые продукты в одном месте.">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #09090f;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    height: 76px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ffffff12;
+    background: #09090f;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #a879ff;
+}
+
+nav {
+    display: flex;
+    gap: 27px;
+}
+
+nav a {
+    color: #aaa8b7;
+    text-decoration: none;
+    font-size: 14px;
+    transition: .2s;
+}
+
+nav a:hover {
+    color: white;
+}
+
+.pro {
+    background: linear-gradient(120deg, #8c52ff, #bd75ff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 19px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.hero {
+    text-align: center;
+    padding: 85px 20px 45px;
+    background:
+        radial-gradient(ellipse at 50% 0%, #6827bd35, transparent 55%);
+}
+
+.tag {
+    display: inline-block;
+    border: 1px solid #a879ff55;
+    color: #c9aaff;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-size: clamp(36px, 7vw, 66px);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+}
+
+.hero h1 span {
+    background: linear-gradient(90deg, #a879ff, #e0a4ff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: #9997a8;
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 550px;
+    margin: auto;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 25px;
+    margin: 35px 0 20px;
+}
+
+.chat-box {
+    background: linear-gradient(145deg, #171321, #101019);
+    border: 1px solid #a879ff35;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 50px #702b9b12;
+}
+
+.chat-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.ai-icon {
+    width: 43px;
+    height: 43px;
+    background: #8b55e9;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+}
+
+.chat-heading small {
+    display: block;
+    color: #9997a8;
+    margin-top: 5px;
+}
+
+.messages {
+    min-height: 90px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.message {
+    background: #ffffff0a;
+    border: 1px solid #ffffff0c;
+    border-radius: 12px;
+    padding: 13px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.message.user {
+    background: #713edb24;
+    border-color: #a879ff35;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    min-width: 0;
+    background: #09090f;
+    color: white;
+    border: 1px solid #ffffff20;
+    border-radius: 12px;
+    padding: 15px;
+    outline: none;
+}
+
+.chat-input input:focus {
+    border-color: #a879ff;
+}
+
+.send {
+    background: #955cf0;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0 22px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tools {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 70px;
+}
+
+.tool {
+    background: #11111b;
+    border: 1px solid #ffffff12;
+    border-radius: 17px;
+    padding: 23px;
+    transition: .25s;
+}
+
+.tool:hover {
+    transform: translateY(-4px);
+    border-color: #a879ff77;
+    background: #191426;
+}
+
+.tool-icon {
+    font-size: 28px;
+    margin-bottom: 17px;
+}
+
+.tool h3 {
+    font-size: 17px;
+    margin-bottom: 9px;
+}
+
+.tool p {
+    color: #9997a8;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.tool button {
+    margin-top: 17px;
+    background: #8b55e9;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+footer {
+    border-top: 1px solid #ffffff12;
+    padding: 28px 15px;
+    text-align: center;
+    color: #777586;
+    font-size: 13px;
+}
+
+@media (max-width: 700px) {
+    header {
+        padding: 0 17px;
+        height: 65px;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .hero {
+        padding-top: 65px;
+    }
+
+    .tools {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-box {
+        padding: 17px;
+    }
+
+    .chat-input {
+        flex-direction: column;
+    }
+
+    .send {
+        padding: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">BULKA <span>INTELLIGENCE</span></div>
+    <nav>
+        <a href="#home">Главная</a>
+        <a href="#chat">AI Chat</a>
+        <a href="#tools">Инструменты</a>
+        <a href="#shop">Магазин</a>
+    </nav>
+    <button class="pro" onclick="showNotice()">PRO ✦</button>
+</header>
+
+<section class="hero" id="home">
+    <div class="tag">✦ ТВОЁ НОВОЕ AI-ПРОСТРАНСТВО</div>
+    <h1>Твои идеи.<br><span>Наш интеллект.</span></h1>
+    <p>
+        Общайся с искусственным интеллектом, создавай контент
+        и используй полезные инструменты в одном месте.
+    </p>
+</section>
+
+<main>
+
+    <h2 class="section-title" id="chat">✦ BULKA AI CHAT</h2>
+
+    <section class="chat-box">
+        <div class="chat-heading">
+            <div class="ai-icon">✦</div>
+            <div>
+                <strong>BULKA AI</strong>
+                <small>Демонстрационный режим</small>
+            </div>
+        </div>
+
+        <div class="messages" id="messages">
+            <div class="message">
+                Привет! Я BULKA AI. Сейчас мой чат работает в демонстрационном режиме. Настоящий AI подключим следующим этапом!
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <input id="question" type="text" placeholder="Напиши что-нибудь..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <button class="send" onclick="sendMessage()">Отправить ↗</button>
+        </div>
+    </section>
+
+    <h2 class="section-title" id="tools">✦ Инструменты</h2>
+
+    <section class="tools">
+
+        <div class="tool">
+            <div class="tool-icon">✍️</div>
+            <h3>Генератор текста</h3>
+            <p>Создание постов, описаний и интересных идей.</p>
+            <button onclick="showNotice()">Открыть</button>
+        </div>
+
+        <div class="tool">
+            <div class="tool-icon">💡</div>
+            <h3>Генератор идей</h3>
+            <p>Находи новые идеи для проектов и контента.</p>
+            <button onclick="showNotice()">Открыть</button>
+        </div>
+
+        <div class="tool">
+            <div class="tool-icon">🎨</div>
+            <h3>AI Дизайн</h3>
+            <p>Инструменты для создания визуального контента.</p>
+            <button onclick="showNotice()">Открыть</button>
+        </div>
+
+        <div class="tool">
+            <div class="tool-icon">📄</div>
+            <h3>Документы</h3>
+            <p>Помощь с текстами, планами и документами.</p>
+            <button onclick="showNotice()">Открыть</button>
+        </div>
+
+        <div class="tool">
+            <div class="tool-icon">⚡</div>
+            <h3>Помощник</h3>
+            <p>Полезные инструменты для повседневных задач.</p>
+            <button onclick="showNotice()">Открыть</button>
+        </div>
+
+        <div class="tool" id="shop">
+            <div class="tool-icon">🛍️</div>
+            <h3>Магазин</h3>
+            <p>Цифровые продукты и дополнительные возможности.</p>
+            <button onclick="showNotice()">Открыть</button>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 BULKA INTELLIGENCE. All rights reserved.
+    <br><br>
+    Your ideas. Our intelligence.
+</footer>
+
+<script>
+function sendMessage() {
+    const input = document.getElementById("question");
+    const messages = document.getElementById("messages");
+    const value = input.value.trim();
+
+    if (!value) return;
+
+    const userMessage = document.createElement("div");
+    userMessage.className = "message user";
+    userMessage.textContent = value;
+    messages.appendChild(userMessage);
+
+    const answer = document.createElement("div");
+    answer.className = "message";
+    answer.textContent = "Я получил твоё сообщение! Настоящий AI пока не подключён. Это демонстрационная версия BULKA INTELLIGENCE.";
+    messages.appendChild(answer);
+
+    input.value = "";
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function showNotice() {
+    alert("Этот инструмент скоро появится в BULKA INTELLIGENCE!");
+}
+</script>
+
+</body>
+</html>
