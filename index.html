@@ -4,77 +4,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BULKA INTELLIGENCE — Твой AI-пространство</title>
-<meta name="description" content="BULKA INTELLIGENCE — искусственный интеллект, полезные инструменты и цифровые продукты в одном месте.">
-
-<script>
-window.MathJax = {
-    tex: {
-        inlineMath: [['\\(', '\\)']],
-        displayMath: [['\\[', '\\]']],
-        processEscapes: true
-    },
-    options: {
-        skipHtmlTags: [
-            'script',
-            'noscript',
-            'style',
-            'textarea',
-            'pre',
-            'code'
-        ]
-    },
-    startup: {
-        typeset: false
-    }
-};
-</script>
+<title>BULKA INTELLIGENCE — Твой AI-мир</title>
+<meta name="description" content="BULKA INTELLIGENCE — искусственный интеллект, технологии и цифровые инструменты в одном месте.">
+<meta name="theme-color" content="#090812">
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --bg: #090812;
+    --panel: #12101f;
+    --purple: #9565ff;
+    --text: #f7f5ff;
+    --muted: #a19bb5;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    background: #09090f;
-    color: #fff;
-    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.background-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: #713cff;
+    filter: blur(180px);
+    opacity: .17;
+    border-radius: 50%;
+    top: -300px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
 }
 
 header {
-    height: 76px;
-    padding: 0 7%;
+    width: 100%;
+    padding: 24px 7%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #ffffff12;
-    background: #09090f;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    position: relative;
+    z-index: 2;
 }
 
 .logo {
     font-size: 21px;
     font-weight: 900;
-    letter-spacing: 1px;
+    letter-spacing: -1px;
 }
 
 .logo span {
-    color: #a879ff;
+    color: var(--purple);
 }
 
 nav {
     display: flex;
-    gap: 27px;
+    align-items: center;
+    gap: 30px;
 }
 
 nav a {
-    color: #aaa8b7;
-    text-decoration: none;
+    color: var(--muted);
     font-size: 14px;
     transition: .2s;
 }
@@ -83,284 +93,322 @@ nav a:hover {
     color: white;
 }
 
-.pro {
-    background: linear-gradient(120deg, #8c52ff, #bd75ff);
+.nav-button {
+    padding: 11px 20px;
+    border-radius: 12px;
+    background: rgba(149,101,255,.15);
+    border: 1px solid rgba(149,101,255,.35);
     color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 11px 19px;
-    font-weight: bold;
-    cursor: pointer;
 }
 
 .hero {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: auto;
+    padding: 125px 24px 105px;
     text-align: center;
-    padding: 85px 20px 45px;
-    background:
-        radial-gradient(ellipse at 50% 0%, #6827bd35, transparent 55%);
 }
 
 .tag {
-    display: inline-block;
-    border: 1px solid #a879ff55;
-    color: #c9aaff;
-    padding: 8px 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 16px;
+    border: 1px solid rgba(149,101,255,.3);
     border-radius: 30px;
+    color: #c7adff;
+    background: rgba(149,101,255,.09);
     font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+.tag-dot {
+    width: 7px;
+    height: 7px;
+    background: #a47aff;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #a47aff;
+}
+
+h1 {
+    font-size: clamp(42px, 7vw, 78px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -4px;
     margin-bottom: 25px;
 }
 
-.hero h1 {
-    font-size: clamp(36px, 7vw, 66px);
-    line-height: 1.1;
-    margin-bottom: 20px;
-    letter-spacing: -2px;
-}
-
-.hero h1 span {
-    background: linear-gradient(90deg, #a879ff, #e0a4ff);
+.gradient {
+    background: linear-gradient(100deg, #a77bff, #714aff, #d2a8ff);
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
 }
 
 .hero p {
-    color: #9997a8;
-    font-size: 16px;
-    line-height: 1.7;
-    max-width: 550px;
+    max-width: 650px;
     margin: auto;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.8;
 }
 
-main {
-    max-width: 1100px;
-    margin: auto;
-    padding: 20px;
-}
-
-.section-title {
-    font-size: 25px;
-    margin: 35px 0 20px;
-}
-
-.chat-box {
-    background: linear-gradient(145deg, #171321, #101019);
-    border: 1px solid #a879ff35;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 50px #702b9b12;
-}
-
-.chat-heading {
+.hero-buttons {
     display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 38px;
+}
+
+.button {
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.ai-icon {
-    width: 43px;
-    height: 43px;
-    background: #8b55e9;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 25px;
     border-radius: 13px;
-    display: grid;
-    place-items: center;
-    font-size: 22px;
-}
-
-.chat-heading small {
-    display: block;
-    color: #9997a8;
-    margin-top: 5px;
-}
-
-.status {
-    color: #9fdfae;
-}
-
-.messages {
-    min-height: 130px;
-    max-height: 450px;
-    overflow-y: auto;
-    margin-bottom: 15px;
-    padding: 5px 0;
-}
-
-.message {
-    background: #ffffff0a;
-    border: 1px solid #ffffff0c;
-    border-radius: 12px;
-    padding: 13px;
-    margin-bottom: 10px;
-    line-height: 1.7;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
-    overflow-x: auto;
-}
-
-.message.user {
-    background: #713edb24;
-    border-color: #a879ff35;
-}
-
-.message.error {
-    border-color: #ff686855;
-    color: #ffaaaa;
-}
-
-.message mjx-container {
-    color: #e0caff !important;
-    max-width: 100%;
-}
-
-.message mjx-container[display="true"] {
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 10px 0;
-}
-
-.chat-input {
-    display: flex;
-    gap: 10px;
-}
-
-.chat-input input {
-    flex: 1;
-    min-width: 0;
-    background: #09090f;
-    color: white;
-    border: 1px solid #ffffff20;
-    border-radius: 12px;
-    padding: 15px;
-    outline: none;
-    font-size: 15px;
-}
-
-.chat-input input:focus {
-    border-color: #a879ff;
-}
-
-.send {
-    background: #955cf0;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 0 22px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.send:disabled {
-    opacity: .6;
-    cursor: wait;
-}
-
-.chat-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 13px;
-    gap: 10px;
-}
-
-.clear-chat {
-    background: transparent;
-    color: #9997a8;
-    border: none;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.chat-note {
-    color: #777586;
-    font-size: 11px;
-}
-
-.tools {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 70px;
-}
-
-.tool {
-    background: #11111b;
-    border: 1px solid #ffffff12;
-    border-radius: 17px;
-    padding: 23px;
+    font-size: 14px;
+    font-weight: 700;
     transition: .25s;
 }
 
-.tool:hover {
-    transform: translateY(-4px);
-    border-color: #a879ff77;
-    background: #191426;
+.button-primary {
+    color: white;
+    background: linear-gradient(110deg, #8955ff, #6739e8);
+    box-shadow: 0 8px 35px rgba(120,75,255,.25);
 }
 
-.tool-icon {
-    font-size: 28px;
+.button-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(120,75,255,.4);
+}
+
+.button-secondary {
+    border: 1px solid rgba(255,255,255,.13);
+    background: rgba(255,255,255,.04);
+}
+
+.button-secondary:hover {
+    background: rgba(255,255,255,.09);
+    transform: translateY(-3px);
+}
+
+.preview {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.preview-window {
+    background: linear-gradient(145deg, #171326, #0e0c18);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 25px 100px rgba(0,0,0,.35);
+}
+
+.window-top {
+    display: flex;
+    gap: 7px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.window-top span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #514768;
+}
+
+.preview-content {
+    padding: 35px 10px 25px;
+    text-align: left;
+}
+
+.preview-label {
+    color: #a989ff;
+    font-size: 12px;
+    font-weight: 700;
     margin-bottom: 17px;
 }
 
-.tool h3 {
+.preview-question {
+    display: inline-block;
+    padding: 15px 19px;
+    background: #28213b;
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 15px 15px 4px 15px;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.preview-answer {
+    color: #c5bfd4;
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 600px;
+}
+
+.features {
+    max-width: 1100px;
+    margin: 120px auto 0;
+    padding: 0 24px;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.section-heading h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -1.5px;
+    margin-bottom: 14px;
+}
+
+.section-heading p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 17px;
+}
+
+.card {
+    background: linear-gradient(145deg, #171426, #100e1b);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 18px;
+    padding: 27px;
+    transition: .25s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(149,101,255,.4);
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(149,101,255,.13);
+    font-size: 23px;
+    margin-bottom: 23px;
+}
+
+.card h3 {
     font-size: 17px;
-    margin-bottom: 9px;
+    margin-bottom: 12px;
 }
 
-.tool p {
-    color: #9997a8;
+.card p {
+    color: var(--muted);
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.7;
 }
 
-.tool button {
-    margin-top: 17px;
-    background: #8b55e9;
-    color: white;
-    border: none;
-    border-radius: 9px;
-    padding: 10px 14px;
-    cursor: pointer;
+.cta {
+    max-width: 1050px;
+    margin: 110px auto;
+    padding: 0 24px;
+}
+
+.cta-inner {
+    text-align: center;
+    padding: 65px 25px;
+    border: 1px solid rgba(149,101,255,.23);
+    border-radius: 24px;
+    background: radial-gradient(ellipse at top, rgba(126,78,255,.18), transparent 65%), #12101f;
+}
+
+.cta h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.cta p {
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-size: 14px;
+    line-height: 1.7;
 }
 
 footer {
-    border-top: 1px solid #ffffff12;
-    padding: 28px 15px;
-    text-align: center;
-    color: #777586;
-    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,.07);
+    padding: 28px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    color: #777186;
+    font-size: 12px;
 }
 
-@media (max-width: 700px) {
+footer strong {
+    color: #c1b5dc;
+}
+
+@media (max-width: 750px) {
     header {
-        padding: 0 17px;
-        height: 65px;
+        padding: 20px 5%;
     }
 
     nav {
-        display: none;
+        gap: 13px;
+    }
+
+    nav a {
+        font-size: 12px;
     }
 
     .logo {
-        font-size: 17px;
+        font-size: 16px;
     }
 
     .hero {
-        padding-top: 65px;
+        padding-top: 85px;
     }
 
-    .tools {
+    h1 {
+        letter-spacing: -2px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .cards {
         grid-template-columns: 1fr;
     }
 
-    .chat-box {
-        padding: 17px;
+    .features {
+        margin-top: 85px;
     }
 
-    .chat-input {
+    footer {
         flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 420px) {
+    nav a:first-child {
+        display: none;
     }
 
-    .send {
-        padding: 14px;
+    .nav-button {
+        padding: 9px 12px;
     }
 }
 </style>
@@ -368,397 +416,118 @@ footer {
 
 <body>
 
+<div class="background-glow"></div>
+
 <header>
-    <div class="logo">BULKA <span>INTELLIGENCE</span></div>
+    <a href="index.html" class="logo">BULKA <span>INTELLIGENCE</span></a>
 
     <nav>
-        <a href="#home">Главная</a>
-        <a href="#chat">AI Chat</a>
-        <a href="#tools">Инструменты</a>
-        <a href="#shop">Магазин</a>
+        <a href="#features">Возможности</a>
+        <a href="#about">О проекте</a>
+        <a href="chat.html" class="nav-button">Открыть чат ↗</a>
     </nav>
-
-    <button class="pro" onclick="showNotice()">PRO ✦</button>
 </header>
-
-<section class="hero" id="home">
-    <div class="tag">✦ ТВОЁ НОВОЕ AI-ПРОСТРАНСТВО</div>
-
-    <h1>Твои идеи.<br><span>Наш интеллект.</span></h1>
-
-    <p>
-        Общайся с искусственным интеллектом, создавай контент
-        и используй полезные инструменты в одном месте.
-    </p>
-</section>
 
 <main>
 
-    <h2 class="section-title" id="chat">✦ BULKA AI CHAT</h2>
+<section class="hero">
+    <div class="tag">
+        <span class="tag-dot"></span>
+        ТВОЁ ЦИФРОВОЕ ПРОСТРАНСТВО
+    </div>
 
-    <section class="chat-box">
+    <h1>
+        Технологии.<br>
+        Идеи. <span class="gradient">Интеллект.</span>
+    </h1>
 
-        <div class="chat-heading">
-            <div class="ai-icon">✦</div>
+    <p>
+        BULKA INTELLIGENCE — пространство искусственного интеллекта,
+        цифровых инструментов и новых возможностей.
+        Всё необходимое для твоих идей в одном месте.
+    </p>
 
-            <div>
-                <strong>BULKA AI</strong>
-                <small class="status">● Gemini AI подключается через сервер</small>
+    <div class="hero-buttons">
+        <a href="chat.html" class="button button-primary">
+            ✦ Открыть ИИ-чат
+        </a>
+
+        <a href="#features" class="button button-secondary">
+            Узнать больше ↓
+        </a>
+    </div>
+</section>
+
+<section class="preview" id="about">
+    <div class="preview-window">
+        <div class="window-top">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="preview-content">
+            <div class="preview-label">BULKA AI · ПРИМЕР РАБОТЫ</div>
+
+            <div class="preview-question">
+                Привет! Помоги придумать идею для моего проекта.
+            </div>
+
+            <div class="preview-answer">
+                Конечно! Давай превратим твою идею в настоящий проект.
+                Можем разработать концепцию, продумать дизайн,
+                написать код и постепенно воплотить всё в жизнь.
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="messages" id="messages">
-            <div class="message">
-                Привет! Я BULKA AI — твой интеллектуальный помощник.
-                Задавай вопросы, придумывай идеи и создавай что-то новое!
-            </div>
-        </div>
+<section class="features" id="features">
+    <div class="section-heading">
+        <h2>Всё начинается с идеи</h2>
+        <p>Инструменты и возможности BULKA INTELLIGENCE</p>
+    </div>
 
-        <div class="chat-input">
-            <input
-                id="question"
-                type="text"
-                placeholder="Напиши что-нибудь..."
-                autocomplete="off"
-            >
+    <div class="cards">
+        <article class="card">
+            <div class="card-icon">✦</div>
+            <h3>Искусственный интеллект</h3>
+            <p>Общайся с ИИ, задавай вопросы, разбирай сложные темы и находи новые идеи.</p>
+        </article>
 
-            <button class="send" id="sendButton" onclick="sendMessage()">
-                Отправить ↗
-            </button>
-        </div>
+        <article class="card">
+            <div class="card-icon">⌘</div>
+            <h3>Цифровые инструменты</h3>
+            <p>Полезные инструменты для повседневных задач, работы и творчества.</p>
+        </article>
 
-        <div class="chat-actions">
-            <span class="chat-note">BULKA INTELLIGENCE • Gemini</span>
-            <button class="clear-chat" onclick="clearChat()">
-                Очистить чат
-            </button>
-        </div>
+        <article class="card">
+            <div class="card-icon">◈</div>
+            <h3>Творчество и идеи</h3>
+            <p>Создавай проекты, экспериментируй и превращай задумки в реальные результаты.</p>
+        </article>
+    </div>
+</section>
 
-    </section>
+<section class="cta">
+    <div class="cta-inner">
+        <h2>Готов начать?</h2>
+        <p>
+            Открой BULKA AI и начни создавать что-то новое.
+        </p>
 
-    <h2 class="section-title" id="tools">✦ Инструменты</h2>
-
-    <section class="tools">
-
-        <div class="tool">
-            <div class="tool-icon">✍️</div>
-            <h3>Генератор текста</h3>
-            <p>Создание постов, описаний и интересных идей.</p>
-            <button onclick="showNotice()">Открыть</button>
-        </div>
-
-        <div class="tool">
-            <div class="tool-icon">💡</div>
-            <h3>Генератор идей</h3>
-            <p>Находи новые идеи для проектов и контента.</p>
-            <button onclick="showNotice()">Открыть</button>
-        </div>
-
-        <div class="tool">
-            <div class="tool-icon">🎨</div>
-            <h3>AI Дизайн</h3>
-            <p>Инструменты для создания визуального контента.</p>
-            <button onclick="showNotice()">Открыть</button>
-        </div>
-
-        <div class="tool">
-            <div class="tool-icon">📄</div>
-            <h3>Документы</h3>
-            <p>Помощь с текстами, планами и документами.</p>
-            <button onclick="showNotice()">Открыть</button>
-        </div>
-
-        <div class="tool">
-            <div class="tool-icon">⚡</div>
-            <h3>Помощник</h3>
-            <p>Полезные инструменты для повседневных задач.</p>
-            <button onclick="showNotice()">Открыть</button>
-        </div>
-
-        <div class="tool" id="shop">
-            <div class="tool-icon">🛍️</div>
-            <h3>Магазин</h3>
-            <p>Цифровые продукты и дополнительные возможности.</p>
-            <button onclick="showNotice()">Открыть</button>
-        </div>
-
-    </section>
+        <a href="chat.html" class="button button-primary">
+            Перейти в ИИ-чат ↗
+        </a>
+    </div>
+</section>
 
 </main>
 
 <footer>
-    © 2026 BULKA INTELLIGENCE. All rights reserved.
-    <br><br>
-    Your ideas. Our intelligence.
+    <strong>BULKA INTELLIGENCE</strong>
+    <span>© 2026 BULKA INTELLIGENCE. Все права защищены.</span>
 </footer>
-
-<script>
-// Загружаем MathJax
-const mathJaxReady = new Promise((resolve) => {
-    const script = document.createElement("script");
-
-    script.src =
-        "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js";
-
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-
-    document.head.appendChild(script);
-});
-
-const API_URL = "https://tiny-cloud-6da5.brightflash2211.workers.dev/";
-const STORAGE_KEY = "bulka_intelligence_chat_v1";
-
-const conversation = [];
-let isSending = false;
-
-const input = document.getElementById("question");
-const messages = document.getElementById("messages");
-const sendButton = document.getElementById("sendButton");
-
-// Сохраняем историю переписки в браузере
-function saveConversation() {
-    try {
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(conversation.slice(-50))
-        );
-    } catch (error) {
-        console.error("Ошибка сохранения истории:", error);
-    }
-}
-
-// Преобразуем формулы Gemini
-function normalizeMathDelimiters(text) {
-    let result = text;
-
-    result = result.replace(
-        /\$\$([\s\S]+?)\$\$/g,
-        function(match, formula) {
-            return "\\[" + formula + "\\]";
-        }
-    );
-
-    result = result.replace(
-        /(^|[^\\])\$([^\n$]+?)\$/g,
-        function(match, before, formula) {
-            return before + "\\(" + formula + "\\)";
-        }
-    );
-
-    return result;
-}
-
-// Добавляем сообщение
-function addMessage(text, type = "") {
-    const element = document.createElement("div");
-
-    element.className = "message " + type;
-    element.textContent = text;
-
-    messages.appendChild(element);
-    messages.scrollTop = messages.scrollHeight;
-
-    return element;
-}
-
-// Отображаем математические формулы
-async function renderMath(element) {
-    try {
-        const loaded = await mathJaxReady;
-
-        if (!loaded || !window.MathJax) {
-            console.error("MathJax не загрузился.");
-            return false;
-        }
-
-        await window.MathJax.startup.promise;
-        await window.MathJax.typesetPromise([element]);
-
-        messages.scrollTop = messages.scrollHeight;
-
-        return true;
-
-    } catch (error) {
-        console.error("Ошибка MathJax:", error);
-        return false;
-    }
-}
-
-// Восстанавливаем переписку после обновления
-async function restoreChat() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-
-        if (!saved) return;
-
-        const history = JSON.parse(saved);
-
-        if (!Array.isArray(history) || history.length === 0) {
-            return;
-        }
-
-        messages.innerHTML = "";
-
-        for (const item of history) {
-            if (
-                !item ||
-                typeof item.content !== "string" ||
-                (item.role !== "user" && item.role !== "assistant")
-            ) {
-                continue;
-            }
-
-            conversation.push(item);
-
-            if (item.role === "user") {
-                addMessage(item.content, "user");
-            } else {
-                const formatted = normalizeMathDelimiters(item.content);
-                const element = addMessage(formatted);
-
-                await renderMath(element);
-            }
-        }
-
-        messages.scrollTop = messages.scrollHeight;
-
-    } catch (error) {
-        console.error("Ошибка восстановления истории:", error);
-    }
-}
-
-// Отправляем сообщение
-async function sendMessage() {
-    const value = input.value.trim();
-
-    if (!value || isSending) return;
-
-    if (value.length > 4000) {
-        addMessage(
-            "Сообщение слишком длинное. Попробуй сократить его.",
-            "error"
-        );
-        return;
-    }
-
-    isSending = true;
-
-    input.disabled = true;
-    sendButton.disabled = true;
-    sendButton.textContent = "Думаю...";
-
-    addMessage(value, "user");
-
-    conversation.push({
-        role: "user",
-        content: value
-    });
-
-    // Сохраняем сообщение пользователя
-    saveConversation();
-
-    input.value = "";
-
-    const loading = addMessage("✦ BULKA AI печатает...");
-
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                messages: conversation.slice(-6)
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || "Ошибка сервера");
-        }
-
-        if (!data.reply) {
-            throw new Error("ИИ не вернул ответ");
-        }
-
-        loading.remove();
-
-        const formattedReply = normalizeMathDelimiters(data.reply);
-
-        const answer = addMessage(formattedReply);
-
-        await renderMath(answer);
-
-        conversation.push({
-            role: "assistant",
-            content: data.reply
-        });
-
-        // Сохраняем ответ ИИ
-        saveConversation();
-
-    } catch (error) {
-        loading.remove();
-
-        addMessage(
-            "Не удалось получить ответ: " + error.message,
-            "error"
-        );
-
-        // Убираем неудачное сообщение из истории
-        conversation.pop();
-
-        saveConversation();
-
-        console.error(error);
-
-    } finally {
-        isSending = false;
-
-        input.disabled = false;
-        sendButton.disabled = false;
-        sendButton.textContent = "Отправить ↗";
-
-        input.focus();
-    }
-}
-
-// Очищаем чат и сохранённую историю
-function clearChat() {
-    if (isSending) return;
-
-    conversation.length = 0;
-
-    try {
-        localStorage.removeItem(STORAGE_KEY);
-    } catch (error) {
-        console.error("Ошибка очистки истории:", error);
-    }
-
-    messages.innerHTML = "";
-
-    addMessage(
-        "История очищена! Привет, я BULKA AI. Чем могу помочь?"
-    );
-}
-
-// Уведомление для будущих инструментов
-function showNotice() {
-    alert("Этот инструмент скоро появится в BULKA INTELLIGENCE!");
-}
-
-// Отправка по Enter
-input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-});
-
-// Загружаем историю при открытии сайта
-restoreChat();
-</script>
 
 </body>
 </html>
