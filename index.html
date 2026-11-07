@@ -493,7 +493,7 @@ footer {
 </footer>
 
 <script>
-// Загружаем MathJax и отдельно отслеживаем его готовность.
+// Загружаем MathJax
 const mathJaxReady = new Promise((resolve) => {
     const script = document.createElement("script");
 
@@ -507,6 +507,7 @@ const mathJaxReady = new Promise((resolve) => {
 });
 
 const API_URL = "https://tiny-cloud-6da5.brightflash2211.workers.dev/";
+const STORAGE_KEY = "bulka_intelligence_chat_v1";
 
 const conversation = [];
 let isSending = false;
@@ -515,12 +516,22 @@ const input = document.getElementById("question");
 const messages = document.getElementById("messages");
 const sendButton = document.getElementById("sendButton");
 
-// Преобразуем долларовые обозначения Gemini в стандартные
-// математические разделители MathJax.
+// Сохраняем историю переписки в браузере
+function saveConversation() {
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(conversation.slice(-50))
+        );
+    } catch (error) {
+        console.error("Ошибка сохранения истории:", error);
+    }
+}
+
+// Преобразуем формулы Gemini
 function normalizeMathDelimiters(text) {
     let result = text;
 
-    // Сначала обрабатываем формулы на отдельных строках.
     result = result.replace(
         /\$\$([\s\S]+?)\$\$/g,
         function(match, formula) {
@@ -528,7 +539,6 @@ function normalizeMathDelimiters(text) {
         }
     );
 
-    // Затем обрабатываем формулы внутри текста.
     result = result.replace(
         /(^|[^\\])\$([^\n$]+?)\$/g,
         function(match, before, formula) {
@@ -539,11 +549,11 @@ function normalizeMathDelimiters(text) {
     return result;
 }
 
+// Добавляем сообщение
 function addMessage(text, type = "") {
     const element = document.createElement("div");
-    element.className = "message " + type;
 
-    // Не вставляем HTML от ИИ напрямую.
+    element.className = "message " + type;
     element.textContent = text;
 
     messages.appendChild(element);
@@ -552,18 +562,17 @@ function addMessage(text, type = "") {
     return element;
 }
 
-// Отображаем формулы после загрузки MathJax.
+// Отображаем математические формулы
 async function renderMath(element) {
     try {
         const loaded = await mathJaxReady;
 
         if (!loaded || !window.MathJax) {
-            console.error("MathJax не загрузился. Проверь подключение к интернету.");
+            console.error("MathJax не загрузился.");
             return false;
         }
 
         await window.MathJax.startup.promise;
-
         await window.MathJax.typesetPromise([element]);
 
         messages.scrollTop = messages.scrollHeight;
@@ -576,6 +585,50 @@ async function renderMath(element) {
     }
 }
 
+// Восстанавливаем переписку после обновления
+async function restoreChat() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) return;
+
+        const history = JSON.parse(saved);
+
+        if (!Array.isArray(history) || history.length === 0) {
+            return;
+        }
+
+        messages.innerHTML = "";
+
+        for (const item of history) {
+            if (
+                !item ||
+                typeof item.content !== "string" ||
+                (item.role !== "user" && item.role !== "assistant")
+            ) {
+                continue;
+            }
+
+            conversation.push(item);
+
+            if (item.role === "user") {
+                addMessage(item.content, "user");
+            } else {
+                const formatted = normalizeMathDelimiters(item.content);
+                const element = addMessage(formatted);
+
+                await renderMath(element);
+            }
+        }
+
+        messages.scrollTop = messages.scrollHeight;
+
+    } catch (error) {
+        console.error("Ошибка восстановления истории:", error);
+    }
+}
+
+// Отправляем сообщение
 async function sendMessage() {
     const value = input.value.trim();
 
@@ -590,6 +643,7 @@ async function sendMessage() {
     }
 
     isSending = true;
+
     input.disabled = true;
     sendButton.disabled = true;
     sendButton.textContent = "Думаю...";
@@ -600,6 +654,9 @@ async function sendMessage() {
         role: "user",
         content: value
     });
+
+    // Сохраняем сообщение пользователя
+    saveConversation();
 
     input.value = "";
 
@@ -628,19 +685,19 @@ async function sendMessage() {
 
         loading.remove();
 
-        // Преобразуем $...$ и $$...$$ перед отображением.
         const formattedReply = normalizeMathDelimiters(data.reply);
 
         const answer = addMessage(formattedReply);
 
-        // Рисуем формулы.
         await renderMath(answer);
 
-        // В историю сохраняем исходный ответ Gemini.
         conversation.push({
             role: "assistant",
             content: data.reply
         });
+
+        // Сохраняем ответ ИИ
+        saveConversation();
 
     } catch (error) {
         loading.remove();
@@ -650,22 +707,36 @@ async function sendMessage() {
             "error"
         );
 
+        // Убираем неудачное сообщение из истории
         conversation.pop();
 
-        console.error(error);
-    }
+        saveConversation();
 
-    isSending = false;
-    input.disabled = false;
-    sendButton.disabled = false;
-    sendButton.textContent = "Отправить ↗";
-    input.focus();
+        console.error(error);
+
+    } finally {
+        isSending = false;
+
+        input.disabled = false;
+        sendButton.disabled = false;
+        sendButton.textContent = "Отправить ↗";
+
+        input.focus();
+    }
 }
 
+// Очищаем чат и сохранённую историю
 function clearChat() {
     if (isSending) return;
 
     conversation.length = 0;
+
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+        console.error("Ошибка очистки истории:", error);
+    }
+
     messages.innerHTML = "";
 
     addMessage(
@@ -673,15 +744,20 @@ function clearChat() {
     );
 }
 
+// Уведомление для будущих инструментов
 function showNotice() {
     alert("Этот инструмент скоро появится в BULKA INTELLIGENCE!");
 }
 
+// Отправка по Enter
 input.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         sendMessage();
     }
 });
+
+// Загружаем историю при открытии сайта
+restoreChat();
 </script>
 
 </body>
