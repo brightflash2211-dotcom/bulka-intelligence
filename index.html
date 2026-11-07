@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BULKA INTELLIGENCE — Твой AI-пространство</title>
 <meta name="description" content="BULKA INTELLIGENCE — искусственный интеллект, полезные инструменты и цифровые продукты в одном месте.">
+
 <style>
 * {
     margin: 0;
@@ -149,11 +150,16 @@ main {
     margin-top: 5px;
 }
 
+.status {
+    color: #9fdfae;
+}
+
 .messages {
-    min-height: 90px;
-    max-height: 300px;
+    min-height: 130px;
+    max-height: 450px;
     overflow-y: auto;
     margin-bottom: 15px;
+    padding: 5px 0;
 }
 
 .message {
@@ -162,13 +168,19 @@ main {
     border-radius: 12px;
     padding: 13px;
     margin-bottom: 10px;
-    line-height: 1.5;
+    line-height: 1.6;
     overflow-wrap: anywhere;
+    white-space: pre-wrap;
 }
 
 .message.user {
     background: #713edb24;
     border-color: #a879ff35;
+}
+
+.message.error {
+    border-color: #ff686855;
+    color: #ffaaaa;
 }
 
 .chat-input {
@@ -185,6 +197,7 @@ main {
     border-radius: 12px;
     padding: 15px;
     outline: none;
+    font-size: 15px;
 }
 
 .chat-input input:focus {
@@ -199,6 +212,31 @@ main {
     padding: 0 22px;
     cursor: pointer;
     font-weight: bold;
+}
+
+.send:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+.chat-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 13px;
+    gap: 10px;
+}
+
+.clear-chat {
+    background: transparent;
+    color: #9997a8;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.chat-note {
+    color: #777586;
+    font-size: 11px;
 }
 
 .tools {
@@ -297,18 +335,22 @@ footer {
 
 <header>
     <div class="logo">BULKA <span>INTELLIGENCE</span></div>
+
     <nav>
         <a href="#home">Главная</a>
         <a href="#chat">AI Chat</a>
         <a href="#tools">Инструменты</a>
         <a href="#shop">Магазин</a>
     </nav>
+
     <button class="pro" onclick="showNotice()">PRO ✦</button>
 </header>
 
 <section class="hero" id="home">
     <div class="tag">✦ ТВОЁ НОВОЕ AI-ПРОСТРАНСТВО</div>
+
     <h1>Твои идеи.<br><span>Наш интеллект.</span></h1>
+
     <p>
         Общайся с искусственным интеллектом, создавай контент
         и используй полезные инструменты в одном месте.
@@ -320,24 +362,43 @@ footer {
     <h2 class="section-title" id="chat">✦ BULKA AI CHAT</h2>
 
     <section class="chat-box">
+
         <div class="chat-heading">
             <div class="ai-icon">✦</div>
+
             <div>
                 <strong>BULKA AI</strong>
-                <small>Демонстрационный режим</small>
+                <small class="status">● Gemini AI подключается через сервер</small>
             </div>
         </div>
 
         <div class="messages" id="messages">
             <div class="message">
-                Привет! Я BULKA AI. Сейчас мой чат работает в демонстрационном режиме. Настоящий AI подключим следующим этапом!
+                Привет! Я BULKA AI — твой интеллектуальный помощник.
+                Задавай вопросы, придумывай идеи и создавай что-то новое!
             </div>
         </div>
 
         <div class="chat-input">
-            <input id="question" type="text" placeholder="Напиши что-нибудь..." onkeydown="if(event.key==='Enter') sendMessage()">
-            <button class="send" onclick="sendMessage()">Отправить ↗</button>
+            <input
+                id="question"
+                type="text"
+                placeholder="Напиши что-нибудь..."
+                autocomplete="off"
+            >
+
+            <button class="send" id="sendButton" onclick="sendMessage()">
+                Отправить ↗
+            </button>
         </div>
+
+        <div class="chat-actions">
+            <span class="chat-note">BULKA INTELLIGENCE • Gemini</span>
+            <button class="clear-chat" onclick="clearChat()">
+                Очистить чат
+            </button>
+        </div>
+
     </section>
 
     <h2 class="section-title" id="tools">✦ Инструменты</h2>
@@ -397,30 +458,117 @@ footer {
 </footer>
 
 <script>
-function sendMessage() {
-    const input = document.getElementById("question");
-    const messages = document.getElementById("messages");
+const API_URL = "https://tiny-cloud-6da5.brightflash2211.workers.dev/";
+
+const conversation = [];
+let isSending = false;
+
+const input = document.getElementById("question");
+const messages = document.getElementById("messages");
+const sendButton = document.getElementById("sendButton");
+
+function addMessage(text, type = "") {
+    const element = document.createElement("div");
+    element.className = "message " + type;
+    element.textContent = text;
+    messages.appendChild(element);
+    messages.scrollTop = messages.scrollHeight;
+    return element;
+}
+
+async function sendMessage() {
     const value = input.value.trim();
 
-    if (!value) return;
+    if (!value || isSending) return;
 
-    const userMessage = document.createElement("div");
-    userMessage.className = "message user";
-    userMessage.textContent = value;
-    messages.appendChild(userMessage);
+    if (value.length > 4000) {
+        addMessage("Сообщение слишком длинное. Попробуй сократить его.", "error");
+        return;
+    }
 
-    const answer = document.createElement("div");
-    answer.className = "message";
-    answer.textContent = "Я получил твоё сообщение! Настоящий AI пока не подключён. Это демонстрационная версия BULKA INTELLIGENCE.";
-    messages.appendChild(answer);
+    isSending = true;
+    input.disabled = true;
+    sendButton.disabled = true;
+    sendButton.textContent = "Думаю...";
+
+    addMessage(value, "user");
+
+    conversation.push({
+        role: "user",
+        content: value
+    });
 
     input.value = "";
-    messages.scrollTop = messages.scrollHeight;
+
+    const loading = addMessage("✦ BULKA AI печатает...");
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                messages: conversation.slice(-20)
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Ошибка сервера");
+        }
+
+        if (!data.reply) {
+            throw new Error("ИИ не вернул ответ");
+        }
+
+        loading.remove();
+
+        addMessage(data.reply);
+
+        conversation.push({
+            role: "assistant",
+            content: data.reply
+        });
+
+    } catch (error) {
+        loading.remove();
+        addMessage(
+            "Не удалось получить ответ: " + error.message,
+            "error"
+        );
+        conversation.pop();
+        console.error(error);
+    }
+
+    isSending = false;
+    input.disabled = false;
+    sendButton.disabled = false;
+    sendButton.textContent = "Отправить ↗";
+    input.focus();
+}
+
+function clearChat() {
+    if (isSending) return;
+
+    conversation.length = 0;
+    messages.innerHTML = "";
+
+    addMessage(
+        "История очищена! Привет, я BULKA AI. Чем могу помочь?"
+    );
 }
 
 function showNotice() {
     alert("Этот инструмент скоро появится в BULKA INTELLIGENCE!");
 }
+
+input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
 </script>
 
 </body>
